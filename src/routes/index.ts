@@ -30,6 +30,7 @@ router.get('/products/category/:category', productsByCategory)
 router.get('/orders/:id', catchErrors(showOrder));
 router.get('/orders', catchErrors(orderIndex));
 router.post('/orders', verifyAuthToken, catchErrors(createOrder));
-router.post("/orders/:is/products", catchErrors(addProduct));
+router.post("/orders/:id/products", catchErrors(addProduct));
 router.delete("/orders/:id", deleteOrder)
 export default router
+
