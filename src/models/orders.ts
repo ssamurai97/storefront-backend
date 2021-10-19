@@ -1,7 +1,8 @@
 import db from '../database'
+import {Product} from "./product";
 
 export interface Orders {
-    id: string
+    id: number
     user_id: string
     status: string
 }
@@ -72,6 +73,34 @@ export class OrderStore {
         }
     }
 
+    async update(id: string, status: string): Promise<Orders>{
+        try {
+            // @ts-ignore
+            const conn = await db.connect()
+            const query = "UPDATE orders SET status = $1  WHERE id = $2";
 
+            const result = await conn.query(query, [status, id]);
+
+            conn.release();
+            return result.rows[0]
+        }catch (err){
+            throw new Error(`Could not find order ${id}. Error: ${err}`)
+        }
+    }
+
+    async delete(id:string): Promise<Product>{
+        try{
+            const conn = await db.connect();
+
+            const query =" DELETE FROM order WHERE id=($1)"
+
+            const result = await conn.query(query,  [id]);
+            const product = result.rows[0];
+            conn.release()
+            return product
+        }catch (err) {
+            throw  new Error(`Could not delete Order ${id} Error: ${err}`)
+        }
+    }
 
 }

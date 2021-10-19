@@ -10,6 +10,7 @@ import {
     showProduct,
     updateProduct
 } from "../handlers/products";
+import {addProduct, createOrder, deleteOrder, orderIndex, showOrder} from "../handlers/orders";
 
 const router = express.Router();
 
@@ -24,4 +25,11 @@ router.get('/products/:id', showProduct)
 router.put('/products/:id', updateProduct);
 router.delete('/products/:id', deleteProduct);
 router.get('/products/category/:category', productsByCategory)
+
+//Orders route
+router.get('/orders/:id', catchErrors(showOrder));
+router.get('/orders', catchErrors(orderIndex));
+router.post('/orders', verifyAuthToken, catchErrors(createOrder));
+router.post("/orders/:is/products", catchErrors(addProduct));
+router.delete("/orders/:id", deleteOrder)
 export default router
