@@ -6,3 +6,13 @@ export const catchErrors = (fn: Function) =>{
         return fn(req, res, next);
     }
 }
+
+
+export const handlerError= (fn: Function, err: Error)=>{
+    return function (){
+        fn().catch(err)
+    }
+}
+
+
+

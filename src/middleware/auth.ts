@@ -2,21 +2,28 @@ import express ,{Request, Response} from "express";
 
 import jwt from 'jsonwebtoken'
 
-export const verifyAuthToken = (
+export function verifyAuthToken (
     req: Request,
     res: Response,
-    next: express.NextFunction)=> {
-    try{
-        const authorizationHeader: string | undefined =req.headers.authorization;
-        let token: string = '';
-        if(authorizationHeader !== undefined){
-            token = authorizationHeader.split(' ')[1];
-        }
-        const decoded = jwt.verify(token, process.env.TOKEN_SECRET as string);
-        next()
-    }catch (err){
-        res.status(401)
-        res.json(err)
-    }
-}
+    next: express.NextFunction){
+
+	if(!req.headers || !req.headers.authorization){
+         return res.status(401).send({message: "No authorization headers"});
+	}
+
+	const tokenBearer = req.headers.authorization.split(' ');
+
+	if(tokenBearer.length != 2){
+          res.status(401).send({message: "Malformed token"})
+	}
+
+	const token = tokenBearer[1];
+        return jwt.verify(token, process.env.TOKEN_SECRET as string, (err) => {
+            if(err){
+              return res.status(500).send({message: "Failed to authenticate"});
+	    }
+
+	return next();
+     })
+  }
 

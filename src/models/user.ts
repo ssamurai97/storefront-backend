@@ -1,6 +1,5 @@
 import bcrypt from 'bcrypt'
-// @ts-ignore
-import db from '../database'
+import db from "../database";
 export interface User{
     id: number
     first_name: string
@@ -17,6 +16,7 @@ export class UserStore{
 
             const result = await conn.query(sql);
             conn.release()
+            console.log(Object.entries(result.rows))
             return result.rows
         }catch (err){
             throw new Error(`Could not get users. Error: ${err}`);
@@ -53,5 +53,22 @@ export class UserStore{
             throw new Error(`Could not add new user ${u.first_name}. Error: ${err}`);
         }
 
+    }
+
+    async login(username: string, password: string): Promise<User | null>{
+        const pepper: string = process.env.BCRYPT_PASSWORD as string;
+        const conn = await db.connect();
+        const sql = "SELECT password FROM users WHERE uername=($1)";
+
+        const result = await conn.query(sql, [username]);
+
+        if(result.rows.length){
+            const user = result.rows[0];
+            console.log(user)
+            if(bcrypt.compareSync(password + pepper, user.password)){
+                return user
+            }
+        }
+        return  null
     }
 }

@@ -35,6 +35,9 @@ export const updateProduct = async (req: Request, res: Response) => {
 
 export const deleteProduct = async (req: Request, res: Response) => {
     const deletedProduct = await store.delete(req.params.id);
+    if(!deletedProduct){
+      return res.status(401).send({auth: false, message: "No product found!!"});
+    }
     res.json(deletedProduct)
 }
 

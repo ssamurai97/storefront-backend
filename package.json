@@ -4,7 +4,9 @@
   "description": "backend api",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "node dist/app.js",
+    "tsc": "tsc",
+    "test": "NODE_ENV=test db-migrate --env test up && jasmine-ts && db-migrate  down --env test"
   },
   "author": "kuchlong2",
   "license": "MIT",
@@ -14,13 +16,18 @@
     "@types/node": "^16.10.3",
     "@types/pg": "^8.6.1",
     "@types/uuid": "^8.3.1",
-    "db-migrate": "*",
+    "db-migrate": "^0.11.12",
     "db-migrate-pg": "^1.2.2",
     "jasmine": "^3.9.0",
     "jasmine-ts": "^0.4.0",
     "ts-node": "^10.2.1",
     "tsc-watch": "^4.5.0",
-    "typescript": "^4.4.3"
+    "typescript": "^4.4.3",
+    "@types/cors": "^2.8.12",
+    "@types/supertest": "^2.0.11",
+    "jasmine-spec-reporter": "^6.0.0",
+    "nodemon": "^2.0.12",
+    "supertest": "^6.1.4"
   },
   "dependencies": {
     "@types/bcrypt": "^5.0.0",
