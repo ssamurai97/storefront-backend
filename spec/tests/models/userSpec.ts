@@ -1,18 +1,18 @@
 import { UserStore} from "../../../src/models/user";
 import {wait} from "../../../src/lib/wait";
-import {v4 as uuid } from 'uuid'
+
 
 const store = new UserStore();
 
 describe("User Model", () => {
   beforeAll(async () => {
     const result = await store.create({
-      id: Number(uuid()),
-      first_name: "Deng",
-      last_name: "Chol",
-      password: "password",
-    });
-  });
+      id: 1,
+      first_name: "Riak",
+      last_name: "madit",
+      password: "password!"
+    })
+  })
   it("should have an index method", () => {
     expect(store.index).toBeDefined();
   });
@@ -24,26 +24,16 @@ describe("User Model", () => {
   it("should have a create method", () => {
     expect(store.create).toBeDefined();
   });
-  it("should create a user", async () => {
-    const result = await store.create({
-      id: Number(uuid()),
-      first_name: "Riak",
-      last_name: "Chan",
-      password: "password123",
-    });
-    await wait (500);
-    expect(result.first_name).toEqual("Riak");
-    expect(result.last_name).toEqual("Chan");
+
+  it('should return all users', async () =>{
+     const users = await store.index()
+    expect(users.length).toBeGreaterThanOrEqual(1)
   });
-  it("should only return single user", async () => {
-    const result = await store.show("1");
-    await wait(1000);
-    expect(result.first_name).toEqual("Deng");
-    expect(result.last_name).toEqual("Chol");
-  });
-  it("should return all users", async () => {
-    const result = await store.index();
-    await wait(3000);
-    expect(result.length).toBeGreaterThanOrEqual(1);
-  });
+
+  it('should return a single user', async () => {
+    const user = await store.show(String(1))
+    await  wait(1000)
+    expect(user.last_name).toBe("madit")
+  })
+
 });

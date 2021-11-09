@@ -32,8 +32,13 @@ export const addProduct = async (req: Request, res: Response) => {
 }
 
 export const updateOrder = async (req: Request, res: Response) => {
-    const order: Orders = await orderStore.update(req.params.id, req.params.status);
-    res.json(order)
+    const order = {
+        status: req.body.status,
+        user_id: req.body.user_id,
+        id: req.body.id
+    };
+    const updated_order = await orderStore.update(order)
+    res.json(updated_order)
 }
 
 export const deleteOrder = async (req: Request, res: Response) => {

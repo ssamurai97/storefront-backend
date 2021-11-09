@@ -14,7 +14,7 @@ export function verifyAuthToken (
 	const tokenBearer = req.headers.authorization.split(' ');
 
 	if(tokenBearer.length != 2){
-          res.status(401).send({message: "Malformed token"})
+         return res.status(401).send({message: "Malformed token"})
 	}
 
 	const token = tokenBearer[1];

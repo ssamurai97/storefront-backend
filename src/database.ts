@@ -9,18 +9,16 @@ POSTGRES_USER,
 POSTGRES_TEST_DB,
 POSTGRES_DB,
 POSTGRES_PASSWORD,
-ENV,
-POSTGRES_PORT
+ENV
 } = process.env
 
 
 
-const db = new Pool({
+const db: Pool = new Pool({
       host: POSTGRES_HOST,
       database: ENV === 'dev'? POSTGRES_DB : POSTGRES_TEST_DB,
       user: POSTGRES_USER,
-      password: POSTGRES_PASSWORD,
-      port: Number(POSTGRES_PORT)
+      password: POSTGRES_PASSWORD
    })
 
 export default db 

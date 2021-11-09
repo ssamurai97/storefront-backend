@@ -1,5 +1,5 @@
 import { productStore} from "../../../src/models/product";
-import {wait} from "../../../src/lib/wait";
+
 
 const store = new productStore();
 describe("Product Model check if the methods exist", () => {

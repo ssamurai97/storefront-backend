@@ -16,6 +16,7 @@ export class OrderStore {
             const sql = "SELECT * FROM orders";
             const result = await conn.query(sql);
             conn.release();
+            console.log(result.rows)
             return result.rows;
         } catch (err) {
             throw new Error(`Could not get orders. Error: ${err}`);
@@ -29,6 +30,7 @@ export class OrderStore {
             const sql = "SELECT * FROM orders WHERE id=($1)";
             const result = await conn.query(sql, [id]);
             conn.release();
+            console.log(result.rows[0])
             return result.rows[0];
         } catch (err) {
             throw new Error(`Could not find orders ${id}. Error: ${err}`);
@@ -44,7 +46,10 @@ export class OrderStore {
                 "INSERT INTO orders (user_id, status) VALUES($1, $2) RETURNING *";
             const result = await conn.query(sql, [order.user_id, order.status]);
             const product = result.rows[0];
+
             conn.release();
+            console.log(product)
+
             return product;
         } catch (err) {
             throw new Error(`Could not add new order ${order.user_id}. Error: ${err}`);
@@ -73,26 +78,27 @@ export class OrderStore {
         }
     }
 
-    async update(id: string, status: string): Promise<Orders>{
+    async update(order: Orders): Promise<Orders>{
         try {
             // @ts-ignore
             const conn = await db.connect()
-            const query = "UPDATE orders SET status = $1  WHERE id = $2";
+            const query = "UPDATE orders SET status = $1, user_id=($2) WHERE id = ($3)";
 
-            const result = await conn.query(query, [status, id]);
+            const result = await conn.query(query, [order.status, order.user_id, order.id]);
 
             conn.release();
             return result.rows[0]
         }catch (err){
-            throw new Error(`Could not find order ${id}. Error: ${err}`)
+            throw new Error(`Could not find order ${order.id}. Error: ${err}`)
         }
     }
 
     async delete(id:string): Promise<Product>{
         try{
+            // @ts-ignore
             const conn = await db.connect();
 
-            const query =" DELETE FROM order WHERE id=($1)"
+            const query =" DELETE FROM orders WHERE id=($1)"
 
             const result = await conn.query(query,  [id]);
             const product = result.rows[0];

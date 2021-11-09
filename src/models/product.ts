@@ -15,6 +15,7 @@ export class productStore {
         p: Product
     ):Promise<Product> {
         try {
+            // @ts-ignore
         const conn = await db.connect()
         const sql = "INSERT INTO products (name, price, category) VALUES($1, $2, $3) RETURNING *";
 
@@ -28,6 +29,7 @@ export class productStore {
 
     async index(): Promise<Product[]>{
         try{
+            // @ts-ignore
             const conn = await db.connect();
             const sql = "SELECT * FROM products";
 
@@ -43,6 +45,7 @@ export class productStore {
     async show(id: string): Promise<Product>{
 
         try{
+            // @ts-ignore
             const conn = await db.connect()
 
             const sql = "SELECT * FROM products WHERE id=($1)";

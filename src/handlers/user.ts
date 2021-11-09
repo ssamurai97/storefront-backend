@@ -45,5 +45,25 @@ export const create = async (req: Request, res: Response) =>{
     }catch (err){
         res.json(err)
     }
+
+
 }
 
+export const authenticate = async (req: Request, res: Response) => {
+    try{
+        const user = await store.authenticate(
+            req.body.last_name,
+            req.body.password
+        );
+        if(user === null){
+            throw  new Error('Can not authenticate, please verify your information')
+        }else {
+            const token = jwt.sign({user}, process.env.TOKEN_SECRET as string)
+            res.json(token)
+        }
+
+    }catch (err){
+      res.status(400)
+        res.json(err)
+    }
+}

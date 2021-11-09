@@ -28,7 +28,7 @@ describe("Order Model crud method test suites", () => {
     await user.create({
       id: Number(uuid()),
       first_name: "Deng",
-      last_name: "Chol",
+      last_name: "madit",
       password: "password123",
     });
     await product.create({

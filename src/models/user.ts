@@ -1,5 +1,7 @@
-import bcrypt from 'bcrypt'
+// @ts-ignore
 import db from "../database";
+import bcrypt from 'bcrypt'
+
 export interface User{
     id: number
     first_name: string
@@ -11,6 +13,7 @@ export class UserStore{
 
     async index(): Promise<User[]>{
         try{
+            //@ts-ignore
             const conn = await db.connect()
             const sql = "SELECT id,first_name, last_name FROM users";
 
@@ -24,6 +27,7 @@ export class UserStore{
     }
 
     async show(id: string): Promise<User> {
+
         try {
             // @ts-ignore
             const conn = await db.connect();
@@ -55,7 +59,7 @@ export class UserStore{
 
     }
 
-    async login(username: string, password: string): Promise<User | null>{
+    async authenticate(username: string, password: string): Promise<User | null>{
         const pepper: string = process.env.BCRYPT_PASSWORD as string;
         const conn = await db.connect();
         const sql = "SELECT password FROM users WHERE uername=($1)";
